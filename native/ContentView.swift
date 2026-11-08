@@ -54,6 +54,13 @@ struct ContentView: View {
         .onChange(of: aiReturnedItem) { _, item in
             Task { await loadAIResult(item) }
         }
+        .onChange(of: aiStudio) { _, enabled in
+            if enabled {
+                if editedImage != nil { editedImage = nil }
+            } else if originalImage != nil {
+                renderPhoto()
+            }
+        }
         .onChange(of: selectedStyle) { _, _ in
             if !aiStudio && originalImage != nil { renderPhoto() }
         }
