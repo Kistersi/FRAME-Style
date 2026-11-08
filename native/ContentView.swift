@@ -23,6 +23,8 @@ private enum AtelierTab: String, CaseIterable {
 struct ContentView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var selectedItem: PhotosPickerItem?
+    @State private var aiReturnedItem: PhotosPickerItem?
+    @State private var aiStudio = false
     @State private var originalImage: UIImage?
     @State private var editedImage: UIImage?
     @State private var selectedStyle: PhotoStyle = .darkCinematic
@@ -49,6 +51,9 @@ struct ContentView: View {
         .onChange(of: selectedItem) { _, item in
             Task { await loadPhoto(item) }
         }
+        .onChange(of: aiReturnedItem) { _, item in
+            Task { await loadAIResult(item) }
+        }
     }
 
     private var brandHeader: some View {
@@ -63,7 +68,7 @@ struct ContentView: View {
                     .foregroundStyle(.white.opacity(0.5))
             }
             Spacer()
-            Text("NATIVE 0.2.0")
+            Text("NATIVE 0.3.0")
                 .font(.system(size: 10, weight: .semibold, design: .monospaced))
                 .foregroundStyle(Color(red: 0.88, green: 0.70, blue: 0.49))
                 .padding(.horizontal, 10).padding(.vertical, 7)
@@ -165,28 +170,61 @@ struct ContentView: View {
 
     private var compactControls: some View {
         VStack(spacing: 9) {
-            HStack {
-                Text("FOTOSTIL").font(.system(size: 10, weight: .bold)).tracking(1.5)
-                Spacer()
-                Text(selectedStyle.rawValue).font(.caption).foregroundStyle(accent)
+            Picker("Bearbeitungsmodus", selection: $aiStudio) {
+                Text("LOCAL").tag(false)
+                Text("AI STUDIO").tag(true)
             }
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 7) {
-                    ForEach(PhotoStyle.allCases) { style in
-                        styleChip(style)
+            .pickerStyle(.segmented)
+
+            if aiStudio {
+                VStack(spacing: 8) {
+                    Text("AI STUDIO · CHATGPT")
+                        .font(.system(size: 10, weight: .bold)).tracking(1.4)
+                        .foregroundStyle(accent)
+                    Text("Übergib dein Foto über das iOS-Teilen-Menü an ChatGPT. Speichere das Ergebnis anschließend in Fotos und importiere es hier wieder.")
+                        .font(.caption).foregroundStyle(.white.opacity(0.58))
+                        .multilineTextAlignment(.center)
+                    if let originalImage {
+                        ShareLink(
+                            item: Image(uiImage: originalImage),
+                            subject: Text("FRAME / STYLE – AI STUDIO"),
+                            message: Text("Bitte bearbeite dieses Foto im Stil \(selectedStyle.rawValue), Farbvariante \(blackAndWhite ? "Schwarz-Weiß" : "Farbig"). Erhalte Motiv, Personen, Gegenstände, Bildausschnitt und Perspektive unverändert. Verändere nur den fotografischen Look. Keine neuen oder entfernten Objekte und kein Text.")
+                        ) {
+                            Label("An ChatGPT übergeben", systemImage: "arrowshape.turn.up.right")
+                                .frame(maxWidth: .infinity).padding(.vertical, 11)
+                        }
+                        .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
+                    }
+                    PhotosPicker(selection: $aiReturnedItem, matching: .images) {
+                        Label("ChatGPT-Ergebnis importieren", systemImage: "square.and.arrow.down")
+                            .frame(maxWidth: .infinity).padding(.vertical, 9)
+                    }
+                    .buttonStyle(.bordered).tint(accent)
+                    Text("Die Übergabe startet nur durch deine Auswahl. ChatGPT ist eine separate App; die Rückgabe erfolgt durch Import.")
+                        .font(.system(size: 9)).foregroundStyle(.white.opacity(0.42))
+                }
+            } else {
+                HStack {
+                    Text("FOTOSTIL").font(.system(size: 10, weight: .bold)).tracking(1.5)
+                    Spacer()
+                    Text(selectedStyle.rawValue).font(.caption).foregroundStyle(accent)
+                }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 7) {
+                        ForEach(PhotoStyle.allCases) { style in styleChip(style) }
                     }
                 }
-            }
-            HStack(spacing: 8) {
-                colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
-                colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
-                Button(action: renderPhoto) {
-                    Label("Umwandeln", systemImage: "sparkles")
-                        .font(.system(size: 12, weight: .bold))
-                        .frame(maxWidth: .infinity).padding(.vertical, 12)
+                HStack(spacing: 8) {
+                    colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
+                    colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
+                    Button(action: renderPhoto) {
+                        Label("Umwandeln", systemImage: "sparkles")
+                            .font(.system(size: 12, weight: .bold))
+                            .frame(maxWidth: .infinity).padding(.vertical, 12)
+                    }
+                    .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
+                    .disabled(originalImage == nil)
                 }
-                .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
-                .disabled(originalImage == nil)
             }
             HStack {
                 photoPickerButton
@@ -226,7 +264,7 @@ struct ContentView: View {
                 Button("Ergebnis in Fotos sichern", systemImage: "square.and.arrow.down", action: savePhoto)
                     .buttonStyle(.bordered).tint(accent)
                     .disabled(editedImage == nil)
-                Text("NATIVE 0.2.0 · LOKALE VERARBEITUNG")
+                Text("NATIVE 0.3.0 · LOKALE VERARBEITUNG")
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.4))
             }
@@ -261,7 +299,7 @@ struct ContentView: View {
                 Text("Deine gespeicherten Bilder findest du in deiner Fotos-App.")
                     .foregroundStyle(.white.opacity(0.55)).font(.footnote)
             } else {
-                Text("FRAME / STYLE Native 0.2.0\nBildverarbeitung erfolgt lokal auf deinem Gerät.")
+                Text("FRAME / STYLE Native 0.3.0\nBildverarbeitung erfolgt lokal auf deinem Gerät.")
                     .multilineTextAlignment(.center).foregroundStyle(.white.opacity(0.55))
             }
             Spacer()
@@ -349,6 +387,17 @@ struct ContentView: View {
         originalImage = image
         editedImage = nil
         statusMessage = "Foto geladen – bereit zur Bearbeitung."
+    }
+
+    @MainActor
+    private func loadAIResult(_ item: PhotosPickerItem?) async {
+        guard let item, let data = try? await item.loadTransferable(type: Data.self),
+              let image = UIImage(data: data) else {
+            statusMessage = "Das ChatGPT-Ergebnis konnte nicht geladen werden."
+            return
+        }
+        editedImage = image
+        statusMessage = "ChatGPT-Ergebnis importiert – bereit zum Speichern."
     }
 
     private func renderPhoto() {
