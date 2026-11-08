@@ -24,4 +24,4 @@ No photo is uploaded to a server. Photo selection, rendering and saving are perf
 
 ## Current status
 
-Native source foundation: **0.1.0**. This is source code ready to add to an Xcode app target, not yet a signed, installable IPA or App Store build. Building, signing and device installation require Xcode on a Mac and the appropriate Apple developer setup.
+Native source foundation: **0.2.0**. This is source code ready to add to an Xcode app target, not yet a signed, installable IPA or App Store build. Building, signing and device installation require Xcode on a Mac and the appropriate Apple developer setup.
