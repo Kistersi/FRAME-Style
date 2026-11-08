@@ -23,9 +23,41 @@ main{flex:1;min-height:0;overflow:hidden}.view{display:none;height:100%;min-heig
 .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;overflow:hidden}.gallery-grid img{width:100%;height:130px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
 nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px + var(--safe));background:#141210ed;backdrop-filter:blur(18px);border-top:1px solid #39332d}.nav-inner{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.nav-item{background:none;border:0;color:#8f867c;padding:5px 2px 3px;border-radius:10px;font-size:9px}.nav-item .nav-ico{display:block;font-size:17px;margin-bottom:2px}.nav-item.active{color:var(--gold2);background:#2b241d}
 .toast{position:fixed;left:50%;bottom:85px;transform:translateX(-50%);background:#eee3d3;color:#211a13;padding:9px 13px;border-radius:11px;font-size:11px;font-weight:650;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;white-space:nowrap}.toast.show{opacity:1}.hidden{display:none!important}
-@media(max-height:700px){.hero{min-height:120px}.hero h1{font-size:26px}.section-head{margin:9px 2px 6px}.tile{min-height:57px;padding:8px 10px}.preview-wrap{height:15dvh}.style-option{min-height:31px;padding:5px 8px}}
+
+/* iPad / wide layouts: dedicated workspace, not an enlarged phone screen */
+@media (min-width:760px) and (min-height:560px){
+ .app{width:min(100%,1180px);padding:env(safe-area-inset-top) 28px calc(78px + var(--safe))}
+ header{height:68px;padding-bottom:14px}.brand{font-size:22px}.eyebrow{font-size:10px}
+ .view#homeView.active{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);grid-template-rows:minmax(210px,1fr) auto auto;column-gap:22px;align-content:stretch}
+ #homeView .hero{grid-column:1;grid-row:1/4;min-height:0;padding:30px}
+ #homeView .hero h1{font-size:clamp(38px,4vw,56px)}
+ #homeView .hero p{font-size:14px;max-width:360px}
+ #homeView .section-head:nth-of-type(1){grid-column:2;grid-row:1;align-self:end}
+ #homeView #homeImport{grid-column:2;grid-row:2;align-self:start}
+ #homeView .section-head:nth-of-type(2){grid-column:2;grid-row:3;align-self:end}
+ #homeView .tiles{grid-column:2;grid-row:4;align-self:start;grid-template-columns:1fr 1fr}
+ #homeView>.note{grid-column:1/-1}
+ .view#atelierView.active{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,340px);grid-template-rows:auto auto minmax(0,1fr);gap:10px 22px;align-items:start}
+ #atelierView .subhead{grid-column:1/-1;grid-row:1}
+ #atelierView .drop{grid-column:1;grid-row:2;min-height:155px;display:flex;flex-direction:column;justify-content:center}
+ #atelierView .preview-wrap{grid-column:1;grid-row:2/4;height:100%;min-height:280px;max-height:calc(100dvh - 190px);margin:0}
+ #atelierView .preview-wrap img{height:100%;max-height:100%;object-fit:contain}
+ #atelierView #atelierControls{grid-column:2;grid-row:2/4;min-width:0}
+ #atelierView .style-grid{grid-template-columns:1fr 1fr}
+ #atelierView .style-option{padding:11px;font-size:12px;min-height:48px}
+ #atelierView .style-option small{font-size:9px}
+ #atelierView .section-head{margin:14px 2px 10px}
+ #atelierView .note{font-size:10px}
+ #galleryView .gallery-grid{grid-template-columns:repeat(4,minmax(0,1fr));overflow:auto}
+ #galleryView .gallery-grid img{height:clamp(130px,22vh,240px)}
+ .nav-inner{max-width:650px}.nav-item{font-size:11px;padding:8px}
+}
+@media (min-width:760px) and (orientation:landscape){
+ #atelierView .preview-wrap{max-height:calc(100dvh - 165px)}
+}
+\n@media(max-height:700px){.hero{min-height:120px}.hero h1{font-size:26px}.section-head{margin:9px 2px 6px}.tile{min-height:57px;padding:8px 10px}.preview-wrap{height:15dvh}.style-option{min-height:31px;padding:5px 8px}}
 </style></head><body><div class="app">
-<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.2.1</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
+<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.3.0</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
 <main>
 <section class="view active" id="homeView"><div class="hero"><div class="hero-kicker">PHOTOGRAPHY · REIMAGINED</div><h1>Dein Moment.<br>Deine Perspektive.</h1><p>Verleihe deinen Aufnahmen einen eigenen Charakter – direkt auf deinem Gerät.</p></div>
 <div class="section-head"><h2>Dein Atelier</h2><small>LOKALE BILDBEARBEITUNG</small></div><button class="primary" id="homeImport">＋ &nbsp; FOTO IMPORTIEREN</button>
@@ -45,11 +77,11 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 <p class="note">Die Umwandlung läuft lokal auf deinem Gerät. Das Original bleibt unverändert.</p></div></section>
 <section class="view" id="galleryView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Bilder</h2></div><div id="galleryEmpty" class="empty">▧<br><br>Noch keine umgewandelten Bilder.<br>Deine gespeicherten Ergebnisse erscheinen hier.</div><div class="gallery-grid" id="galleryGrid"></div></section>
 <section class="view" id="stylesView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Stile</h2></div><div class="style-grid" id="allStyles"></div><p class="note">Wähle deinen Look anschließend im Foto-Atelier.</p></section>
-<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.2.1</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
+<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.3.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
 </main></div>
 <nav><div class="nav-inner"><button class="nav-item active" data-go="home"><span class="nav-ico">⌂</span>Home</button><button class="nav-item" data-go="atelier"><span class="nav-ico">◉</span>Atelier</button><button class="nav-item" data-go="gallery"><span class="nav-ico">▧</span>Galerie</button><button class="nav-item" data-go="styles"><span class="nav-ico">✧</span>Stile</button></div></nav><div class="toast" id="toast"></div>
 <script>
-const APP_VERSION="0.2.1";$("headerVersion").textContent="v"+APP_VERSION;$("settingsVersion").textContent=APP_VERSION;\nconst styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Dezent · Originalnah"]];
+const APP_VERSION="0.3.0";$("headerVersion").textContent="v"+APP_VERSION;$("settingsVersion").textContent=APP_VERSION;\nconst styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Dezent · Originalnah"]];
 const presets={"Urban B/W":{filter:"grayscale(1) contrast(1.35) brightness(.94)"},
 "Dark Cinematic":{filter:"contrast(1.2) saturate(.82) brightness(.82)",overlay:"rgba(75,42,20,.16)"},
 "Warm Vintage":{filter:"sepia(.38) saturate(1.12) contrast(.94) brightness(1.04)"},
