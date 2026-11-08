@@ -1,0 +1,19 @@
+{
+  "name": "FRAME / STYLE – Photo Atelier",
+  "short_name": "FRAME / STYLE",
+  "description": "Your personal photo atelier.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#11100f",
+  "theme_color": "#11100f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
