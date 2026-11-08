@@ -409,16 +409,49 @@ struct ContentView: View {
 
     private func savePhoto() {
         guard let editedImage else { return }
-        PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+        statusMessage = "Speichere in Album FRAMESTYLE …"
+
+        // Creating or finding a named album requires read/write Photo Library access.
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
             guard status == .authorized || status == .limited else {
-                Task { @MainActor in statusMessage = "Keine Berechtigung zum Speichern in Fotos." }
+                Task { @MainActor in
+                    statusMessage = "Bitte erlaube FRAME / STYLE den Zugriff auf deine Fotomediathek."
+                }
                 return
             }
+
+            let options = PHFetchOptions()
+            options.predicate = NSPredicate(format: "localizedTitle == %@", "FRAMESTYLE")
+            let albums = PHAssetCollection.fetchAssetCollections(
+                with: .album,
+                subtype: .any,
+                options: options
+            )
+            let existingAlbum = albums.firstObject
+
             PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: editedImage)
+                let assetRequest = PHAssetChangeRequest.creationRequestForAsset(from: editedImage)
+                guard let placeholder = assetRequest.placeholderForCreatedAsset else { return }
+
+                let albumRequest: PHAssetCollectionChangeRequest
+                if let existingAlbum,
+                   let changeRequest = PHAssetCollectionChangeRequest(for: existingAlbum) {
+                    albumRequest = changeRequest
+                } else {
+                    guard let createRequest = PHAssetCollectionChangeRequest
+                        .creationRequestForAssetCollection(withTitle: "FRAMESTYLE") as PHAssetCollectionChangeRequest? else {
+                        return
+                    }
+                    albumRequest = createRequest
+                }
+                albumRequest.addAssets([placeholder] as NSArray)
             }) { success, error in
                 Task { @MainActor in
-                    statusMessage = success ? "Gespeichert in deiner Fotos-App." : (error?.localizedDescription ?? "Speichern fehlgeschlagen.")
+                    if success {
+                        statusMessage = "Gespeichert im Album „FRAMESTYLE“."
+                    } else {
+                        statusMessage = error?.localizedDescription ?? "Speichern im Album fehlgeschlagen."
+                    }
                 }
             }
         }
