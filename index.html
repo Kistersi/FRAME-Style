@@ -129,7 +129,7 @@ $("aiReturnInput").addEventListener("change",e=>{
   reader.onload=()=>{
     const img=new Image();
     img.onload=()=>{
-      sourceImage=img;sourceName=(file.name||"chatgpt-ergebnis").replace(/\\.[^.]+$/,"");
+      sourceImage=img;sourceName=(file.name||"chatgpt-ergebnis").replace(/\.[^.]+$/,"");
       resultData=reader.result;
       $("photoPreview").src=resultData;
       $("photoName").textContent=file.name||"ChatGPT-Ergebnis";
