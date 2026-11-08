@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#11100f"><meta name="description" content="FRAME / STYLE – Your personal photo atelier.">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>FRAME / STYLE</title>
+<style>
+:root{color-scheme:dark;--bg:#11100f;--panel:#1b1917;--line:#39332d;--text:#f4eee5;--muted:#a69b8e;--gold:#c89b63;--gold2:#e0b77e;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{padding:env(safe-area-inset-top) 0 calc(76px + var(--safe))}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+.app{max-width:720px;margin:auto;min-height:100vh;padding:18px 18px 24px}header{display:flex;justify-content:space-between;align-items:center;padding:8px 2px 22px}
+.brand{font-size:21px;letter-spacing:.16em;font-weight:750}.brand span{color:var(--gold)}.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--muted);margin-top:5px}
+.icon-btn{border:1px solid var(--line);background:var(--panel);width:42px;height:42px;border-radius:14px;font-size:18px}
+.hero{position:relative;overflow:hidden;border-radius:22px;min-height:210px;background:linear-gradient(125deg,#27211b,#121110 68%);border:1px solid #3a3026;padding:25px;display:flex;flex-direction:column;justify-content:flex-end}
+.hero:before{content:"";position:absolute;width:230px;height:230px;border:1px solid #a77c4d55;border-radius:50%;right:-75px;top:-75px;box-shadow:0 0 0 22px #a77c4d0d,0 0 0 48px #a77c4d0a}
+.hero:after{content:"";position:absolute;width:110px;height:110px;border:1px solid #d4a56c66;border-radius:50%;right:22px;top:22px}
+.hero>*{position:relative;z-index:1}.hero-kicker{color:var(--gold2);font-size:10px;letter-spacing:.22em}.hero h1{font-family:Georgia,serif;font-weight:400;font-size:34px;line-height:1.06;margin:12px 0 8px}.hero p{color:#c0b5a8;font-size:13px;line-height:1.5;max-width:290px;margin:0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:27px 2px 13px}.section-head h2{font-size:15px;margin:0;font-weight:650}.section-head small{color:var(--muted);font-size:11px}
+.primary{width:100%;border:0;border-radius:14px;padding:16px 18px;background:linear-gradient(135deg,#d7ad79,#b9844f);color:#17120d;font-weight:750;letter-spacing:.04em;box-shadow:0 8px 24px #0005}
+.secondary{border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:12px 15px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:11px}.tile{border:1px solid var(--line);border-radius:17px;background:var(--panel);padding:17px;min-height:112px;text-align:left}.tile .ico{font-size:21px;color:var(--gold);display:block;margin-bottom:12px}.tile strong{display:block;font-size:13px}.tile small{display:block;color:var(--muted);font-size:11px;margin-top:5px}
+.view{display:none}.view.active{display:block}.subhead{display:flex;align-items:center;gap:10px;margin:5px 0 20px}.back{background:none;border:0;color:var(--gold);font-size:23px;padding:5px}.subhead h2{font-size:20px;margin:0}
+.drop{border:1px dashed #806344;border-radius:20px;background:#1b1815;padding:24px 18px;text-align:center}.drop .camera{font-size:34px;color:var(--gold);margin-bottom:10px}.drop p{color:var(--muted);font-size:12px;line-height:1.5}
+.preview-wrap{display:none;margin-top:16px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#080808}.preview-wrap img{display:block;width:100%;max-height:55vh;object-fit:contain}.preview-meta{padding:12px 14px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:8px}
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.style-option{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;text-align:left;font-size:12px}.style-option.selected{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold2)}.style-option small{display:block;color:var(--muted);margin-top:4px;font-size:10px}
+.seg{display:flex;gap:8px}.seg button{flex:1;padding:12px;border:1px solid var(--line);background:var(--panel);border-radius:12px;font-size:12px}.seg button.selected{border-color:var(--gold);color:var(--gold2);background:#30261c}
+.empty{border:1px solid var(--line);border-radius:17px;padding:25px;text-align:center;color:var(--muted);font-size:12px;line-height:1.6;background:var(--panel)}.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.gallery-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+.note{color:var(--muted);font-size:11px;line-height:1.5;margin-top:14px}
+nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:9px 12px calc(9px + var(--safe));background:#141210ed;backdrop-filter:blur(18px);border-top:1px solid #39332d}
+.nav-inner{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.nav-item{background:none;border:0;color:#8f867c;padding:7px 2px 4px;border-radius:12px;font-size:10px}.nav-item .nav-ico{display:block;font-size:19px;margin-bottom:4px}.nav-item.active{color:var(--gold2);background:#2b241d}
+.toast{position:fixed;left:50%;bottom:95px;transform:translateX(-50%);background:#eee3d3;color:#211a13;padding:11px 16px;border-radius:12px;font-size:12px;font-weight:650;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;white-space:nowrap}.toast.show{opacity:1}.hidden{display:none!important}
+@media(min-width:600px){.app{padding-top:28px}.hero{min-height:260px}.hero h1{font-size:42px}.tiles{grid-template-columns:repeat(4,1fr)}}
+</style></head><body><div class="app">
+<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
+<main>
+<section class="view active" id="homeView"><div class="hero"><div class="hero-kicker">PHOTOGRAPHY · REIMAGINED</div><h1>Dein Moment.<br>Deine Perspektive.</h1><p>Verleihe deinen Aufnahmen einen eigenen Charakter – mit deinem persönlichen Foto-Atelier.</p></div>
+<div class="section-head"><h2>Dein Atelier</h2><small>PHASE 1 · GRUNDGERÜST</small></div><button class="primary" id="homeImport">＋ &nbsp; FOTO IMPORTIEREN</button>
+<div class="section-head"><h2>Schnellzugriff</h2><small>WILLKOMMEN</small></div><div class="tiles">
+<button class="tile" data-go="gallery"><span class="ico">▧</span><strong>Meine Bilder</strong><small>Deine Galerie</small></button>
+<button class="tile" data-go="atelier"><span class="ico">◉</span><strong>Foto-Atelier</strong><small>Bild auswählen</small></button>
+<button class="tile" data-go="styles"><span class="ico">✧</span><strong>Meine Stile</strong><small>Sieben Looks</small></button>
+<button class="tile" data-go="settings"><span class="ico">⚙</span><strong>Einstellungen</strong><small>App-Informationen</small></button></div>
+<p class="note">Dein Original bleibt unangetastet. Bildbearbeitung und optionale KI-Funktionen werden in den nächsten Entwicklungsphasen ergänzt.</p></section>
+<section class="view" id="atelierView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Foto-Atelier</h2></div>
+<div class="drop" id="dropArea"><div class="camera">◎</div><strong>Dein Foto beginnt hier.</strong><p>Wähle ein Bild aus deiner Fotomediathek oder deinen Dateien aus.</p><button class="secondary" id="choosePhoto">FOTO AUSWÄHLEN</button></div>
+<input class="hidden" type="file" id="photoInput" accept="image/*">
+<div class="preview-wrap" id="previewWrap"><img id="photoPreview" alt="Ausgewähltes Foto"><div class="preview-meta"><span id="photoName">Foto</span><span id="photoDimensions"></span></div></div>
+<div id="atelierControls" class="hidden"><div class="section-head"><h2>Fotostil</h2><small>VORSCHAU-AUSWAHL</small></div><div class="style-grid" id="atelierStyles"></div>
+<div class="section-head"><h2>Farbvariante</h2></div><div class="seg"><button class="selected" data-color="Farbig">Farbig</button><button data-color="Schwarz-Weiß">Schwarz-Weiß</button></div>
+<p class="note">In Phase 1 funktionieren Fotoimport und Auswahl. Stilberechnung, Bildoptimierung und Export folgen in den nächsten Phasen.</p></div></section>
+<section class="view" id="galleryView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Bilder</h2></div><div id="galleryEmpty" class="empty">▧<br><br>Noch keine bearbeiteten Bilder.<br>Deine Galerie füllt sich, sobald du Bilder speicherst.</div><div class="gallery-grid" id="galleryGrid"></div><p class="note">Die Galerie wird später um lokale Bildverwaltung und Bearbeitungsverläufe erweitert.</p></section>
+<section class="view" id="stylesView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Stile</h2></div><p class="note">Wähle im Atelier einen Look aus. Die sieben Stilprofile sind vorbereitet; die Bildwirkung wird in Phase 2 implementiert.</p><div class="style-grid" id="allStyles"></div></section>
+<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version 0.1.0 · Phase 1<br><br><span style="color:#c89b63">CINEMATIC PHOTO ATELIER</span><br><br>Diese PWA ist das technische Grundgerüst. Sie kann über HTTPS aufgerufen und zum iPhone-Home-Bildschirm hinzugefügt werden.</div><p class="note">Für Installation und Service Worker ist eine HTTPS-Adresse erforderlich.</p></section>
+</main></div>
+<nav><div class="nav-inner"><button class="nav-item active" data-go="home"><span class="nav-ico">⌂</span>Home</button><button class="nav-item" data-go="atelier"><span class="nav-ico">◉</span>Atelier</button><button class="nav-item" data-go="gallery"><span class="nav-ico">▧</span>Galerie</button><button class="nav-item" data-go="styles"><span class="nav-ico">✧</span>Stile</button></div></nav><div class="toast" id="toast"></div>
+<script>
+const styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Individuelle Einstellungen"]];
+let selectedStyle="Dark Cinematic",selectedColor="Farbig",currentPhotoUrl=null;const $=id=>document.getElementById(id);
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2100)}
+function go(name){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));const target=$(name+"View");if(target)target.classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.go===name));window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+$("homeImport").onclick=()=>{go("atelier");$("photoInput").click()};$("choosePhoto").onclick=()=>$("photoInput").click();
+$("dropArea").addEventListener("dragover",e=>e.preventDefault());$("dropArea").addEventListener("drop",e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith("image/"))loadPhoto(f)});
+$("photoInput").addEventListener("change",e=>{const f=e.target.files[0];if(f)loadPhoto(f)});
+function loadPhoto(file){if(currentPhotoUrl)URL.revokeObjectURL(currentPhotoUrl);currentPhotoUrl=URL.createObjectURL(file);const img=$("photoPreview");img.src=currentPhotoUrl;$("photoName").textContent=file.name;$("photoDimensions").textContent="Wird geladen …";img.onload=()=>{$("photoDimensions").textContent=img.naturalWidth+" × "+img.naturalHeight+" px"};$("previewWrap").style.display="block";$("atelierControls").classList.remove("hidden");$("dropArea").style.display="none";toast("Foto erfolgreich importiert")}
+function renderStyles(target){$(target).innerHTML="";styles.forEach(([name,desc])=>{const b=document.createElement("button");b.className="style-option"+(name===selectedStyle?" selected":"");b.innerHTML="<strong>"+name+"</strong><small>"+desc+"</small>";b.onclick=()=>{selectedStyle=name;renderStyles("atelierStyles");renderStyles("allStyles");toast(name+" ausgewählt")};$(target).appendChild(b)})}
+renderStyles("atelierStyles");renderStyles("allStyles");
+document.querySelectorAll("[data-color]").forEach(b=>b.addEventListener("click",()=>{selectedColor=b.dataset.color;document.querySelectorAll("[data-color]").forEach(x=>x.classList.toggle("selected",x===b));toast("Farbvariante: "+selectedColor)}));
+$("settingsBtn").onclick=()=>go("settings");if("serviceWorker"in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script></body></html>
