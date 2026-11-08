@@ -54,6 +54,12 @@ struct ContentView: View {
         .onChange(of: aiReturnedItem) { _, item in
             Task { await loadAIResult(item) }
         }
+        .onChange(of: selectedStyle) { _, _ in
+            if !aiStudio && originalImage != nil { renderPhoto() }
+        }
+        .onChange(of: blackAndWhite) { _, _ in
+            if !aiStudio && originalImage != nil { renderPhoto() }
+        }
     }
 
     private var brandHeader: some View {
@@ -68,7 +74,7 @@ struct ContentView: View {
                     .foregroundStyle(.white.opacity(0.5))
             }
             Spacer()
-            Text("NATIVE 0.3.0")
+            Text("NATIVE 0.4.0")
                 .font(.system(size: 10, weight: .semibold, design: .monospaced))
                 .foregroundStyle(Color(red: 0.88, green: 0.70, blue: 0.49))
                 .padding(.horizontal, 10).padding(.vertical, 7)
@@ -129,18 +135,20 @@ struct ContentView: View {
     private var previewArea: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 18).fill(Color.black.opacity(0.45))
-            if let originalImage {
-                if let editedImage {
-                    HStack(spacing: 5) {
-                        previewColumn(image: originalImage, label: "ORIGINAL")
-                        previewColumn(image: editedImage, label: "FRAME / STYLE")
+            if let image = editedImage ?? originalImage {
+                Image(uiImage: image)
+                    .resizable().scaledToFit()
+                    .padding(8)
+                    .overlay(alignment: .topLeading) {
+                        if editedImage != nil {
+                            Text(aiStudio ? "AI STUDIO" : "LIVE-VORSCHAU")
+                                .font(.system(size: 9, weight: .bold)).tracking(1.1)
+                                .foregroundStyle(accent)
+                                .padding(.horizontal, 9).padding(.vertical, 6)
+                                .background(.black.opacity(0.72), in: Capsule())
+                                .padding(12)
+                        }
                     }
-                    .padding(7)
-                } else {
-                    Image(uiImage: originalImage)
-                        .resizable().scaledToFit()
-                        .padding(8)
-                }
             } else {
                 VStack(spacing: 8) {
                     Image(systemName: "photo")
@@ -220,23 +228,17 @@ struct ContentView: View {
                 HStack {
                     Text("FOTOSTIL").font(.system(size: 10, weight: .bold)).tracking(1.5)
                     Spacer()
-                    Text(selectedStyle.rawValue).font(.caption).foregroundStyle(accent)
-                }
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 7) {
-                        ForEach(PhotoStyle.allCases) { style in styleChip(style) }
+                    Picker("Fotostil", selection: $selectedStyle) {
+                        ForEach(PhotoStyle.allCases) { style in
+                            Text(style.rawValue).tag(style)
+                        }
                     }
+                    .pickerStyle(.menu)
+                    .tint(accent)
                 }
                 HStack(spacing: 8) {
                     colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
                     colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
-                    Button(action: renderPhoto) {
-                        Label("Umwandeln", systemImage: "sparkles")
-                            .font(.system(size: 12, weight: .bold))
-                            .frame(maxWidth: .infinity).padding(.vertical, 12)
-                    }
-                    .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
-                    .disabled(originalImage == nil)
                 }
             }
             HStack {
@@ -296,19 +298,18 @@ struct ContentView: View {
                     Spacer()
                 } else {
                     Text("Fotostil").font(.headline)
-                    ForEach(PhotoStyle.allCases) { style in styleRow(style) }
+                    Picker("Fotostil", selection: $selectedStyle) {
+                        ForEach(PhotoStyle.allCases) { style in
+                            Text(style.rawValue).tag(style)
+                        }
+                    }
+                    .pickerStyle(.menu).tint(accent)
                     Divider().overlay(line)
                     Text("Farbvariante").font(.headline)
                     colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
                     colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
                     Spacer()
                     photoPickerButton
-                    Button(action: renderPhoto) {
-                        Label("Jetzt umwandeln", systemImage: "sparkles")
-                            .frame(maxWidth: .infinity).padding(.vertical, 13)
-                    }
-                    .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
-                    .disabled(originalImage == nil)
                 }
                 Button("Ergebnis in Fotos sichern", systemImage: "square.and.arrow.down", action: savePhoto)
                     .buttonStyle(.bordered).tint(accent)
@@ -348,7 +349,7 @@ struct ContentView: View {
                 Text("Deine gespeicherten Bilder findest du in deiner Fotos-App.")
                     .foregroundStyle(.white.opacity(0.55)).font(.footnote)
             } else {
-                Text("FRAME / STYLE Native 0.3.0\nBildverarbeitung erfolgt lokal auf deinem Gerät.")
+                Text("FRAME / STYLE Native 0.4.0\nBildverarbeitung erfolgt lokal auf deinem Gerät.")
                     .multilineTextAlignment(.center).foregroundStyle(.white.opacity(0.55))
             }
             Spacer()
@@ -435,7 +436,8 @@ struct ContentView: View {
         }
         originalImage = image
         editedImage = nil
-        statusMessage = "Foto geladen – bereit zur Bearbeitung."
+        statusMessage = "Foto geladen – Live-Vorschau wird erstellt."
+        if !aiStudio { renderPhoto() }
     }
 
     @MainActor
