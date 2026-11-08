@@ -439,7 +439,7 @@ struct ContentView: View {
                     albumRequest = changeRequest
                 } else {
                     guard let createRequest = PHAssetCollectionChangeRequest
-                        .creationRequestForAssetCollection(withTitle: "FRAMESTYLE") as PHAssetCollectionChangeRequest? else {
+                        .creationRequestForAssetCollection(withTitle: "FRAMESTYLE") else {
                         return
                     }
                     albumRequest = createRequest
