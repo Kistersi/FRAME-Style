@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#11100f"><meta name="description" content="FRAME / STYLE – lokales Foto-Atelier.">
+<meta name="theme-color" content="#11100f"><meta name="description" content="FRAME / STYLE – lokales Foto-Atelier mit optionaler ChatGPT-Übergabe.">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>FRAME / STYLE</title>
 <style>
@@ -60,14 +60,14 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 </style></head><body><div class="app">
 <header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.5.0</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
 <main>
-<section class="view active" id="homeView"><div class="hero"><div class="hero-kicker">PHOTOGRAPHY · REIMAGINED</div><h1>Dein Moment.<br>Deine Perspektive.</h1><p>Verleihe deinen Aufnahmen einen eigenen Charakter – direkt auf deinem Gerät.</p></div>
+<section class="view active" id="homeView"><div class="hero"><div class="hero-kicker">PHOTOGRAPHY · REIMAGINED</div><h1>Dein Moment.<br>Deine Perspektive.</h1><p>Bearbeite deine Aufnahmen lokal oder übergib sie bewusst an ChatGPT.</p></div>
 <div class="section-head"><h2>Dein Atelier</h2><small>LOKALE BILDBEARBEITUNG</small></div><button class="primary" id="homeImport">＋ &nbsp; FOTO IMPORTIEREN</button>
 <div class="section-head"><h2>Schnellzugriff</h2></div><div class="tiles">
 <button class="tile" data-go="gallery"><span class="ico">▧</span><strong>Meine Bilder</strong><small>Lokale Galerie</small></button>
 <button class="tile" data-go="atelier"><span class="ico">◉</span><strong>Foto-Atelier</strong><small>Bild umwandeln</small></button>
 <button class="tile" data-go="styles"><span class="ico">✧</span><strong>Meine Stile</strong><small>Sieben Looks</small></button>
 <button class="tile" data-go="settings"><span class="ico">⚙</span><strong>Einstellungen</strong><small>Datenschutz</small></button></div>
-<p class="note">Deine Fotos verlassen dein Gerät nicht. Es findet kein automatischer Upload statt.</p></section>
+<p class="note">LOCAL bleibt auf deinem Gerät. AI STUDIO überträgt Fotos nur nach deiner bewussten Freigabe an ChatGPT.</p></section>
 <section class="view" id="atelierView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Foto-Atelier</h2></div>
 <div class="drop" id="dropArea"><div class="camera">◎</div><strong>Dein Foto beginnt hier.</strong><p>Wähle ein Bild aus deiner Fotomediathek oder deinen Dateien.</p><button class="secondary" id="choosePhoto">FOTO AUSWÄHLEN</button></div>
 <input class="hidden" type="file" id="photoInput" accept="image/*">
@@ -91,7 +91,7 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 </div></section>
 <section class="view" id="galleryView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Bilder</h2></div><div id="galleryEmpty" class="empty">▧<br><br>Noch keine umgewandelten Bilder.<br>Deine gespeicherten Ergebnisse erscheinen hier.</div><div class="gallery-grid" id="galleryGrid"></div></section>
 <section class="view" id="stylesView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Stile</h2></div><div class="style-grid" id="allStyles"></div><p class="note">Wähle deinen Look anschließend im Foto-Atelier.</p></section>
-<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.5.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
+<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.5.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>LOCAL verarbeitet Fotos nur im Browser. AI STUDIO übergibt ein Foto ausschließlich nach deinem Klick an die ChatGPT-App.</div></section>
 </main></div>
 <nav><div class="nav-inner"><button class="nav-item active" data-go="home"><span class="nav-ico">⌂</span>Home</button><button class="nav-item" data-go="atelier"><span class="nav-ico">◉</span>Atelier</button><button class="nav-item" data-go="gallery"><span class="nav-ico">▧</span>Galerie</button><button class="nav-item" data-go="styles"><span class="nav-ico">✧</span>Stile</button></div></nav><div class="toast" id="toast"></div>
 <script>
