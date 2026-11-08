@@ -58,7 +58,7 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 
 @media(max-height:700px){.hero{min-height:120px}.hero h1{font-size:26px}.section-head{margin:9px 2px 6px}.tile{min-height:57px;padding:8px 10px}.preview-wrap{height:15dvh}.style-option{min-height:31px;padding:5px 8px}}
 </style></head><body><div class="app">
-<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.4.0</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
+<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.5.0</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
 <main>
 <section class="view active" id="homeView"><div class="hero"><div class="hero-kicker">PHOTOGRAPHY · REIMAGINED</div><h1>Dein Moment.<br>Deine Perspektive.</h1><p>Verleihe deinen Aufnahmen einen eigenen Charakter – direkt auf deinem Gerät.</p></div>
 <div class="section-head"><h2>Dein Atelier</h2><small>LOKALE BILDBEARBEITUNG</small></div><button class="primary" id="homeImport">＋ &nbsp; FOTO IMPORTIEREN</button>
@@ -72,17 +72,30 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 <div class="drop" id="dropArea"><div class="camera">◎</div><strong>Dein Foto beginnt hier.</strong><p>Wähle ein Bild aus deiner Fotomediathek oder deinen Dateien.</p><button class="secondary" id="choosePhoto">FOTO AUSWÄHLEN</button></div>
 <input class="hidden" type="file" id="photoInput" accept="image/*">
 <div class="preview-wrap" id="previewWrap"><img id="photoPreview" alt="Foto-Vorschau"><div class="preview-meta"><span id="photoName">Foto</span><span id="photoDimensions"></span></div></div>
-<div id="atelierControls" class="hidden"><div class="section-head"><h2>Fotostil</h2><small>LOOK AUSWÄHLEN</small></div><div class="style-grid" id="atelierStyles"></div>
+<div id="atelierControls" class="hidden">
+<div class="section-head"><h2>Bearbeitungsmodus</h2><small>DU HAST DIE WAHL</small></div>
+<div class="seg mode-switch"><button class="selected" data-mode="local">LOCAL</button><button data-mode="ai">AI STUDIO</button></div>
+<div id="localPanel">
+<div class="section-head"><h2>Fotostil</h2><small>LOOK AUSWÄHLEN</small></div><div class="style-grid" id="atelierStyles"></div>
 <div class="section-head"><h2>Farbvariante</h2></div><div class="seg"><button class="selected" data-color="Farbig">Farbig</button><button data-color="Schwarz-Weiß">Schwarz-Weiß</button></div>
-<div class="actions"><button class="primary" id="convertBtn">✦ &nbsp; JETZT UMWANDELN</button><button class="secondary hidden" id="saveBtn">SPEICHERN</button></div>
-<p class="note">Die Umwandlung läuft lokal auf deinem Gerät. Das Original bleibt unverändert.</p></div></section>
+<div class="actions"><button class="primary" id="convertBtn">✦ &nbsp; LOKAL UMWANDELN</button><button class="secondary hidden" id="saveBtn">SPEICHERN</button></div>
+<p class="note">LOCAL verarbeitet das Foto ausschließlich auf deinem Gerät.</p>
+</div>
+<div id="aiPanel" class="hidden">
+<div class="empty ai-info" style="text-align:left"><strong>AI STUDIO · CHATGPT</strong><br>Übergib dein Foto über das iOS-Teilen-Menü an ChatGPT. Wähle dort die Bildbearbeitung. Speichere das fertige Bild anschließend in Fotos oder Dateien und importiere es hier wieder.</div>
+<div class="actions"><button class="primary" id="shareChatGPT">AN CHATGPT ÜBERGEBEN</button></div>
+<input class="hidden" type="file" id="aiReturnInput" accept="image/*">
+<div class="actions"><button class="secondary" id="importAiResult">BEARBEITETES BILD IMPORTIEREN</button></div>
+<p class="note">Die Übertragung erfolgt nur, wenn du sie aktiv startest. ChatGPT ist eine separate App; die Rückgabe erfolgt durch erneuten Import.</p>
+</div>
+</div></section>
 <section class="view" id="galleryView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Bilder</h2></div><div id="galleryEmpty" class="empty">▧<br><br>Noch keine umgewandelten Bilder.<br>Deine gespeicherten Ergebnisse erscheinen hier.</div><div class="gallery-grid" id="galleryGrid"></div></section>
 <section class="view" id="stylesView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Stile</h2></div><div class="style-grid" id="allStyles"></div><p class="note">Wähle deinen Look anschließend im Foto-Atelier.</p></section>
-<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.4.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
+<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.5.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
 </main></div>
 <nav><div class="nav-inner"><button class="nav-item active" data-go="home"><span class="nav-ico">⌂</span>Home</button><button class="nav-item" data-go="atelier"><span class="nav-ico">◉</span>Atelier</button><button class="nav-item" data-go="gallery"><span class="nav-ico">▧</span>Galerie</button><button class="nav-item" data-go="styles"><span class="nav-ico">✧</span>Stile</button></div></nav><div class="toast" id="toast"></div>
 <script>
-const APP_VERSION="0.4.0";
+const APP_VERSION="0.5.0";
 const styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Dezent · Originalnah"]];
 const presets={"Urban B/W":{filter:"grayscale(1) contrast(1.35) brightness(.94)"},
 "Dark Cinematic":{filter:"contrast(1.2) saturate(.82) brightness(.82)",overlay:"rgba(75,42,20,.16)"},
@@ -91,7 +104,7 @@ const presets={"Urban B/W":{filter:"grayscale(1) contrast(1.35) brightness(.94)"
 "Natural Pro":{filter:"saturate(1.08) contrast(1.06) brightness(1.02)"},
 "Soft Mono":{filter:"grayscale(1) contrast(.92) brightness(1.08)"},
 "Eigener Stil":{filter:"saturate(1.04) contrast(1.02)"}};
-let selectedStyle="Dark Cinematic",selectedColor="Farbig",sourceImage=null,sourceName="foto",resultData=null;const $=id=>document.getElementById(id);
+let selectedStyle="Dark Cinematic",selectedColor="Farbig",selectedMode="local",sourceImage=null,sourceName="foto",resultData=null;const $=id=>document.getElementById(id);
 $("headerVersion").textContent="v"+APP_VERSION;$("settingsVersion").textContent=APP_VERSION;
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1900)}
 function go(name){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));const target=$(name+"View");if(target)target.classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.go===name))}
@@ -100,7 +113,60 @@ $("homeImport").onclick=()=>{go("atelier");$("photoInput").click()};$("choosePho
 $("dropArea").addEventListener("dragover",e=>e.preventDefault());$("dropArea").addEventListener("drop",e=>{e.preventDefault();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith("image/"))loadPhoto(f)});
 $("photoInput").addEventListener("change",e=>{const f=e.target.files[0];if(f)loadPhoto(f)});
 function loadPhoto(file){const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{sourceImage=img;sourceName=(file.name||"foto").replace(/\.[^.]+$/,"");$("photoPreview").src=reader.result;$("photoName").textContent=file.name;$("photoDimensions").textContent=img.naturalWidth+" × "+img.naturalHeight+" px";$("previewWrap").style.display="block";$("atelierControls").classList.remove("hidden");$("dropArea").style.display="none";$("saveBtn").classList.add("hidden");resultData=null;toast("Foto lokal geladen")};img.onerror=()=>toast("Dieses Bildformat kann nicht geöffnet werden");img.src=reader.result};reader.readAsDataURL(file)}
-function renderStyles(target){$(target).innerHTML="";styles.forEach(([name,desc])=>{const b=document.createElement("button");b.className="style-option"+(name===selectedStyle?" selected":"");b.innerHTML="<strong>"+name+"</strong><small>"+desc+"</small>";b.onclick=()=>{selectedStyle=name;renderStyles("atelierStyles");renderStyles("allStyles");toast(name+" ausgewählt")};$(target).appendChild(b)})}
+function renderStyles(target){$(target).innerHTML="";styles.forEach(([name,desc])=>{const b=document.createElement("button");b.className="style-option"+(name===selectedStyle?" selected":"");b.innerHTML="<strong>"+name+"</strong><small>"+desc+"</small>";b.onclick=()=>{selectedStyle=name;renderStyles("atelierStyles");renderStyles("allStyles");
+document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>{
+  selectedMode=b.dataset.mode;
+  document.querySelectorAll("[data-mode]").forEach(x=>x.classList.toggle("selected",x===b));
+  $("localPanel").classList.toggle("hidden",selectedMode!=="local");
+  $("aiPanel").classList.toggle("hidden",selectedMode!=="ai");
+  toast(selectedMode==="ai"?"AI STUDIO · Übergabe an ChatGPT":"LOCAL · Verarbeitung auf diesem Gerät");
+}));
+$("importAiResult").onclick=()=>$("aiReturnInput").click();
+$("aiReturnInput").addEventListener("change",e=>{
+  const file=e.target.files&&e.target.files[0];if(!file)return;
+  if(!file.type.startsWith("image/")){toast("Bitte eine Bilddatei auswählen");return}
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      sourceImage=img;sourceName=(file.name||"chatgpt-ergebnis").replace(/\\.[^.]+$/,"");
+      resultData=reader.result;
+      $("photoPreview").src=resultData;
+      $("photoName").textContent=file.name||"ChatGPT-Ergebnis";
+      $("photoDimensions").textContent=img.naturalWidth+" × "+img.naturalHeight+" px · AI STUDIO";
+      $("saveBtn").classList.remove("hidden");
+      $("galleryEmpty").classList.add("hidden");
+      const thumb=document.createElement("img");thumb.src=resultData;thumb.alt="AI STUDIO";$("galleryGrid").prepend(thumb);
+      toast("ChatGPT-Ergebnis importiert");
+    };
+    img.onerror=()=>toast("Das zurückgegebene Bild konnte nicht geöffnet werden");
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);e.target.value="";
+});
+$("shareChatGPT").onclick=async()=>{
+  if(!sourceImage){toast("Bitte zuerst ein Foto auswählen");return}
+  try{
+    const canvas=document.createElement("canvas");
+    canvas.width=sourceImage.naturalWidth;canvas.height=sourceImage.naturalHeight;
+    const ctx=canvas.getContext("2d");ctx.drawImage(sourceImage,0,0);
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",.94));
+    if(!blob)throw new Error("Bilddatei konnte nicht erstellt werden");
+    const file=new File([blob],sourceName+"-FRAME-STYLE.jpg",{type:"image/jpeg"});
+    const instruction="Bitte bearbeite dieses Foto im Stil "+selectedStyle+" ("+selectedColor+"). Erhalte Motiv, Personen, Gegenstände, Bildausschnitt und Perspektive unverändert. Verändere ausschließlich den fotografischen Look: Licht, Farbgebung, Kontrast und Atmosphäre. Keine neuen oder entfernten Objekte, kein Text. Gib das bearbeitete Bild zurück.";
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:"FRAME / STYLE – AI STUDIO",text:instruction});
+      toast("Teilen-Menü geöffnet · ChatGPT auswählen");
+    }else{
+      const url=URL.createObjectURL(file);const a=document.createElement("a");a.href=url;a.download=file.name;a.click();URL.revokeObjectURL(url);
+      toast("Foto exportiert · anschließend in ChatGPT teilen");
+    }
+  }catch(err){
+    if(err&&err.name==="AbortError")return;
+    console.error("FRAME / STYLE ChatGPT share:",err);
+    toast("Übergabe nicht möglich: "+(err.message||"Bitte erneut versuchen"));
+  }
+};toast(name+" ausgewählt")};$(target).appendChild(b)})}
 renderStyles("atelierStyles");renderStyles("allStyles");
 document.querySelectorAll("[data-color]").forEach(b=>b.addEventListener("click",()=>{selectedColor=b.dataset.color;document.querySelectorAll("[data-color]").forEach(x=>x.classList.toggle("selected",x===b));toast("Farbvariante: "+selectedColor)}));
 function applyLook(ctx,w,h){
