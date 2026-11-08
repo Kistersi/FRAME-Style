@@ -245,22 +245,47 @@ struct ContentView: View {
                 brandHeader
                 Divider().overlay(line)
                 Text("BEARBEITUNG").font(.system(size: 10, weight: .bold)).tracking(1.7).foregroundStyle(accent)
-                Text("Fotostil").font(.headline)
-                ForEach(PhotoStyle.allCases) { style in
-                    styleRow(style)
+                Picker("Bearbeitungsmodus", selection: $aiStudio) {
+                    Text("LOCAL").tag(false)
+                    Text("AI STUDIO").tag(true)
                 }
-                Divider().overlay(line)
-                Text("Farbvariante").font(.headline)
-                colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
-                colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
-                Spacer()
-                photoPickerButton
-                Button(action: renderPhoto) {
-                    Label("Jetzt umwandeln", systemImage: "sparkles")
-                        .frame(maxWidth: .infinity).padding(.vertical, 13)
+                .pickerStyle(.segmented)
+                if aiStudio {
+                    Text("AI STUDIO · CHATGPT").font(.headline).foregroundStyle(accent)
+                    Text("Foto bewusst an ChatGPT übergeben und das Ergebnis anschließend importieren.")
+                        .font(.caption).foregroundStyle(.white.opacity(0.55))
+                    if let originalImage {
+                        ShareLink(
+                            item: Image(uiImage: originalImage),
+                            subject: Text("FRAME / STYLE – AI STUDIO"),
+                            message: Text("Bitte bearbeite dieses Foto im Stil \(selectedStyle.rawValue), Farbvariante \(blackAndWhite ? "Schwarz-Weiß" : "Farbig"). Erhalte Motiv, Personen, Gegenstände, Bildausschnitt und Perspektive unverändert. Verändere nur den fotografischen Look. Keine neuen oder entfernten Objekte und kein Text.")
+                        ) {
+                            Label("An ChatGPT übergeben", systemImage: "arrowshape.turn.up.right")
+                                .frame(maxWidth: .infinity).padding(.vertical, 12)
+                        }
+                        .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
+                    }
+                    PhotosPicker(selection: $aiReturnedItem, matching: .images) {
+                        Label("ChatGPT-Ergebnis importieren", systemImage: "square.and.arrow.down")
+                    }
+                    .buttonStyle(.bordered).tint(accent)
+                    Spacer()
+                } else {
+                    Text("Fotostil").font(.headline)
+                    ForEach(PhotoStyle.allCases) { style in styleRow(style) }
+                    Divider().overlay(line)
+                    Text("Farbvariante").font(.headline)
+                    colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
+                    colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
+                    Spacer()
+                    photoPickerButton
+                    Button(action: renderPhoto) {
+                        Label("Jetzt umwandeln", systemImage: "sparkles")
+                            .frame(maxWidth: .infinity).padding(.vertical, 13)
+                    }
+                    .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
+                    .disabled(originalImage == nil)
                 }
-                .buttonStyle(.borderedProminent).tint(accent).foregroundStyle(.black)
-                .disabled(originalImage == nil)
                 Button("Ergebnis in Fotos sichern", systemImage: "square.and.arrow.down", action: savePhoto)
                     .buttonStyle(.bordered).tint(accent)
                     .disabled(editedImage == nil)
