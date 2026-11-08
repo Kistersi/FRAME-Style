@@ -1,4 +1,4 @@
-const CACHE="frame-style-v11";
+const CACHE="frame-style-v12";
 const FILES=["./","./index.html","./manifest.json","./icon.svg"];
 
 self.addEventListener("install",event=>{
