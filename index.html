@@ -58,7 +58,7 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 
 @media(max-height:700px){.hero{min-height:120px}.hero h1{font-size:26px}.section-head{margin:9px 2px 6px}.tile{min-height:57px;padding:8px 10px}.preview-wrap{height:15dvh}.style-option{min-height:31px;padding:5px 8px}}
 </style></head><body><div class="app">
-<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.3.0</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
+<header><div><div class="brand">FRAME <span>/</span> STYLE</div><div class="eyebrow">YOUR PERSONAL PHOTO ATELIER</div></div><span class="version-pill" id="headerVersion">v0.4.0</span><button class="icon-btn" aria-label="Einstellungen" id="settingsBtn">⚙</button></header>
 <main>
 <section class="view active" id="homeView"><div class="hero"><div class="hero-kicker">PHOTOGRAPHY · REIMAGINED</div><h1>Dein Moment.<br>Deine Perspektive.</h1><p>Verleihe deinen Aufnahmen einen eigenen Charakter – direkt auf deinem Gerät.</p></div>
 <div class="section-head"><h2>Dein Atelier</h2><small>LOKALE BILDBEARBEITUNG</small></div><button class="primary" id="homeImport">＋ &nbsp; FOTO IMPORTIEREN</button>
@@ -78,11 +78,11 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 <p class="note">Die Umwandlung läuft lokal auf deinem Gerät. Das Original bleibt unverändert.</p></div></section>
 <section class="view" id="galleryView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Bilder</h2></div><div id="galleryEmpty" class="empty">▧<br><br>Noch keine umgewandelten Bilder.<br>Deine gespeicherten Ergebnisse erscheinen hier.</div><div class="gallery-grid" id="galleryGrid"></div></section>
 <section class="view" id="stylesView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Meine Stile</h2></div><div class="style-grid" id="allStyles"></div><p class="note">Wähle deinen Look anschließend im Foto-Atelier.</p></section>
-<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.3.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
+<section class="view" id="settingsView"><div class="subhead"><button class="back" data-go="home">‹</button><h2>Einstellungen</h2></div><div class="empty" style="text-align:left"><strong>FRAME / STYLE</strong><br>Version <span id="settingsVersion">0.4.0</span> · Lokale Bearbeitung<br><br><span style="color:#c89b63">DEINE PRIVATSPHÄRE BLEIBT GESCHÜTZT</span><br><br>Fotos werden nur im Browser verarbeitet. Es gibt keinen Foto-Upload und keine Cloud-Speicherung.</div></section>
 </main></div>
 <nav><div class="nav-inner"><button class="nav-item active" data-go="home"><span class="nav-ico">⌂</span>Home</button><button class="nav-item" data-go="atelier"><span class="nav-ico">◉</span>Atelier</button><button class="nav-item" data-go="gallery"><span class="nav-ico">▧</span>Galerie</button><button class="nav-item" data-go="styles"><span class="nav-ico">✧</span>Stile</button></div></nav><div class="toast" id="toast"></div>
 <script>
-const APP_VERSION="0.3.0";
+const APP_VERSION="0.4.0";
 const styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Dezent · Originalnah"]];
 const presets={"Urban B/W":{filter:"grayscale(1) contrast(1.35) brightness(.94)"},
 "Dark Cinematic":{filter:"contrast(1.2) saturate(.82) brightness(.82)",overlay:"rgba(75,42,20,.16)"},
@@ -103,7 +103,68 @@ function loadPhoto(file){const reader=new FileReader();reader.onload=()=>{const 
 function renderStyles(target){$(target).innerHTML="";styles.forEach(([name,desc])=>{const b=document.createElement("button");b.className="style-option"+(name===selectedStyle?" selected":"");b.innerHTML="<strong>"+name+"</strong><small>"+desc+"</small>";b.onclick=()=>{selectedStyle=name;renderStyles("atelierStyles");renderStyles("allStyles");toast(name+" ausgewählt")};$(target).appendChild(b)})}
 renderStyles("atelierStyles");renderStyles("allStyles");
 document.querySelectorAll("[data-color]").forEach(b=>b.addEventListener("click",()=>{selectedColor=b.dataset.color;document.querySelectorAll("[data-color]").forEach(x=>x.classList.toggle("selected",x===b));toast("Farbvariante: "+selectedColor)}));
-$("convertBtn").onclick=()=>{if(!sourceImage){toast("Bitte zuerst ein Foto auswählen");return}try{const max=3000,scale=Math.min(1,max/Math.max(sourceImage.naturalWidth,sourceImage.naturalHeight));const canvas=document.createElement("canvas");canvas.width=Math.round(sourceImage.naturalWidth*scale);canvas.height=Math.round(sourceImage.naturalHeight*scale);const ctx=canvas.getContext("2d");const preset=presets[selectedStyle];ctx.filter=preset.filter+(selectedColor==="Schwarz-Weiß"?" grayscale(1)":"");ctx.drawImage(sourceImage,0,0,canvas.width,canvas.height);ctx.filter="none";if(preset.overlay){ctx.fillStyle=preset.overlay;ctx.fillRect(0,0,canvas.width,canvas.height)}resultData=canvas.toDataURL("image/jpeg",.93);$("photoPreview").src=resultData;$("photoDimensions").textContent=canvas.width+" × "+canvas.height+" px · "+selectedStyle;$("saveBtn").classList.remove("hidden");$("galleryEmpty").classList.add("hidden");const thumb=document.createElement("img");thumb.src=resultData;thumb.alt=selectedStyle;$("galleryGrid").prepend(thumb);toast("Bild erfolgreich umgewandelt")}catch(err){console.error(err);toast("Umwandlung fehlgeschlagen – bitte anderes Foto testen")}};
+function applyLook(ctx,w,h){
+  const image=ctx.getImageData(0,0,w,h);
+  const px=image.data;
+  const looks={
+    "Urban B/W":{sat:0,contrast:1.48,bright:-7,mono:true},
+    "Dark Cinematic":{sat:.78,contrast:1.28,bright:-19,warm:.13,shadow:.10},
+    "Warm Vintage":{sat:.88,contrast:.94,bright:8,sepia:.48,warm:.08},
+    "Cold Blue":{sat:.82,contrast:1.16,bright:2,cool:.18},
+    "Natural Pro":{sat:1.22,contrast:1.13,bright:3,vibrance:.10},
+    "Soft Mono":{sat:0,contrast:.91,bright:9,mono:true},
+    "Eigener Stil":{sat:1.13,contrast:1.08,bright:2,vibrance:.06}
+  };
+  const p=looks[selectedStyle]||looks["Dark Cinematic"];
+  const clamp=v=>Math.max(0,Math.min(255,v));
+  for(let i=0;i<px.length;i+=4){
+    let r=px[i],g=px[i+1],b=px[i+2];
+    const lum=.2126*r+.7152*g+.0722*b;
+    const sat=(selectedColor==="Schwarz-Weiß")?0:p.sat;
+    r=lum+(r-lum)*sat;g=lum+(g-lum)*sat;b=lum+(b-lum)*sat;
+    if(p.vibrance){
+      const max=Math.max(r,g,b),min=Math.min(r,g,b);
+      const boost=p.vibrance*(1-(max-min)/255);
+      r=lum+(r-lum)*(1+boost);g=lum+(g-lum)*(1+boost);b=lum+(b-lum)*(1+boost);
+    }
+    r=(r-128)*p.contrast+128+p.bright;
+    g=(g-128)*p.contrast+128+p.bright;
+    b=(b-128)*p.contrast+128+p.bright;
+    if(p.sepia){
+      const sr=.393*r+.769*g+.189*b,sg=.349*r+.686*g+.168*b,sb=.272*r+.534*g+.131*b;
+      r=r*(1-p.sepia)+sr*p.sepia;g=g*(1-p.sepia)+sg*p.sepia;b=b*(1-p.sepia)+sb*p.sepia;
+    }
+    if(p.warm){r+=30*p.warm;g+=8*p.warm;b-=22*p.warm}
+    if(p.cool){r-=18*p.cool;g+=2*p.cool;b+=32*p.cool}
+    if(p.shadow){
+      const factor=(255-lum)/255*p.shadow;
+      r-=12*factor;g-=7*factor;b+=3*factor;
+    }
+    px[i]=clamp(r);px[i+1]=clamp(g);px[i+2]=clamp(b);
+  }
+  ctx.putImageData(image,0,0);
+}
+$("convertBtn").onclick=()=>{
+  if(!sourceImage){toast("Bitte zuerst ein Foto auswählen");return}
+  try{
+    const max=2600,scale=Math.min(1,max/Math.max(sourceImage.naturalWidth,sourceImage.naturalHeight));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(sourceImage.naturalWidth*scale));
+    canvas.height=Math.max(1,Math.round(sourceImage.naturalHeight*scale));
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    if(!ctx)throw new Error("Canvas konnte nicht gestartet werden");
+    ctx.drawImage(sourceImage,0,0,canvas.width,canvas.height);
+    applyLook(ctx,canvas.width,canvas.height);
+    resultData=canvas.toDataURL("image/jpeg",.94);
+    $("photoPreview").src=resultData;
+    $("photoDimensions").textContent=canvas.width+" × "+canvas.height+" px · "+selectedStyle+" · "+selectedColor;
+    $("saveBtn").classList.remove("hidden");
+    $("galleryEmpty").classList.add("hidden");
+    const thumb=document.createElement("img");thumb.src=resultData;thumb.alt=selectedStyle;
+    $("galleryGrid").prepend(thumb);
+    toast(selectedStyle+" wurde auf die Bilddaten angewendet");
+  }catch(err){console.error("FRAME / STYLE conversion:",err);toast("Umwandlung fehlgeschlagen: "+(err.message||"Unbekannter Fehler"))}
+};
 $("saveBtn").onclick=()=>{if(!resultData)return;const a=document.createElement("a");a.href=resultData;a.download=sourceName+"-frame-style.jpg";document.body.appendChild(a);a.click();a.remove();toast("Bild zum Speichern bereit")};
 $("settingsBtn").onclick=()=>go("settings");
 if("serviceWorker"in navigator&&location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
