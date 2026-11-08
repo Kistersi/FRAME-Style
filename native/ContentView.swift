@@ -181,6 +181,19 @@ struct ContentView: View {
                     Text("AI STUDIO · CHATGPT")
                         .font(.system(size: 10, weight: .bold)).tracking(1.4)
                         .foregroundStyle(accent)
+                    Picker("KI-Fotostil", selection: Binding(
+                        get: { selectedStyle.rawValue },
+                        set: { selectedStyle = PhotoStyle(rawValue: $0) ?? .darkCinematic }
+                    )) {
+                        ForEach(PhotoStyle.allCases) { style in
+                            Text(style.rawValue).tag(style.rawValue)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    HStack(spacing: 8) {
+                        colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
+                        colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
+                    }
                     Text("Übergib dein Foto über das iOS-Teilen-Menü an ChatGPT. Speichere das Ergebnis anschließend in Fotos und importiere es hier wieder.")
                         .font(.caption).foregroundStyle(.white.opacity(0.58))
                         .multilineTextAlignment(.center)
@@ -252,6 +265,17 @@ struct ContentView: View {
                 .pickerStyle(.segmented)
                 if aiStudio {
                     Text("AI STUDIO · CHATGPT").font(.headline).foregroundStyle(accent)
+                    Picker("KI-Fotostil", selection: Binding(
+                        get: { selectedStyle.rawValue },
+                        set: { selectedStyle = PhotoStyle(rawValue: $0) ?? .darkCinematic }
+                    )) {
+                        ForEach(PhotoStyle.allCases) { style in
+                            Text(style.rawValue).tag(style.rawValue)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    colorModeButton("Farbig", isSelected: !blackAndWhite) { blackAndWhite = false }
+                    colorModeButton("Schwarz-Weiß", isSelected: blackAndWhite) { blackAndWhite = true }
                     Text("Foto bewusst an ChatGPT übergeben und das Ergebnis anschließend importieren.")
                         .font(.caption).foregroundStyle(.white.opacity(0.55))
                     if let originalImage {
