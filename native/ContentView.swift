@@ -63,7 +63,7 @@ struct ContentView: View {
                     .foregroundStyle(.white.opacity(0.5))
             }
             Spacer()
-            Text("NATIVE 0.1.0")
+            Text("NATIVE 0.2.0")
                 .font(.system(size: 10, weight: .semibold, design: .monospaced))
                 .foregroundStyle(Color(red: 0.88, green: 0.70, blue: 0.49))
                 .padding(.horizontal, 10).padding(.vertical, 7)
@@ -226,7 +226,7 @@ struct ContentView: View {
                 Button("Ergebnis in Fotos sichern", systemImage: "square.and.arrow.down", action: savePhoto)
                     .buttonStyle(.bordered).tint(accent)
                     .disabled(editedImage == nil)
-                Text("NATIVE 0.1.0 · LOKALE VERARBEITUNG")
+                Text("NATIVE 0.2.0 · LOKALE VERARBEITUNG")
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.4))
             }
@@ -261,7 +261,7 @@ struct ContentView: View {
                 Text("Deine gespeicherten Bilder findest du in deiner Fotos-App.")
                     .foregroundStyle(.white.opacity(0.55)).font(.footnote)
             } else {
-                Text("FRAME / STYLE Native 0.1.0\nBildverarbeitung erfolgt lokal auf deinem Gerät.")
+                Text("FRAME / STYLE Native 0.2.0\nBildverarbeitung erfolgt lokal auf deinem Gerät.")
                     .multilineTextAlignment(.center).foregroundStyle(.white.opacity(0.55))
             }
             Spacer()
