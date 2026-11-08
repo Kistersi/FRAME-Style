@@ -81,7 +81,8 @@ nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 10px calc(7px 
 </main></div>
 <nav><div class="nav-inner"><button class="nav-item active" data-go="home"><span class="nav-ico">⌂</span>Home</button><button class="nav-item" data-go="atelier"><span class="nav-ico">◉</span>Atelier</button><button class="nav-item" data-go="gallery"><span class="nav-ico">▧</span>Galerie</button><button class="nav-item" data-go="styles"><span class="nav-ico">✧</span>Stile</button></div></nav><div class="toast" id="toast"></div>
 <script>
-const APP_VERSION="0.3.0";$("headerVersion").textContent="v"+APP_VERSION;$("settingsVersion").textContent=APP_VERSION;\nconst styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Dezent · Originalnah"]];
+const APP_VERSION="0.3.0";
+const styles=[["Urban B/W","Urban · Kontrastreich"],["Dark Cinematic","Dunkel · Warm · Dramatisch"],["Warm Vintage","Analog · Golden · Weich"],["Cold Blue","Kühl · Klar · Modern"],["Natural Pro","Natürlich · Ausgewogen"],["Soft Mono","Monochrom · Sanft"],["Eigener Stil","Dezent · Originalnah"]];
 const presets={"Urban B/W":{filter:"grayscale(1) contrast(1.35) brightness(.94)"},
 "Dark Cinematic":{filter:"contrast(1.2) saturate(.82) brightness(.82)",overlay:"rgba(75,42,20,.16)"},
 "Warm Vintage":{filter:"sepia(.38) saturate(1.12) contrast(.94) brightness(1.04)"},
@@ -90,6 +91,7 @@ const presets={"Urban B/W":{filter:"grayscale(1) contrast(1.35) brightness(.94)"
 "Soft Mono":{filter:"grayscale(1) contrast(.92) brightness(1.08)"},
 "Eigener Stil":{filter:"saturate(1.04) contrast(1.02)"}};
 let selectedStyle="Dark Cinematic",selectedColor="Farbig",sourceImage=null,sourceName="foto",resultData=null;const $=id=>document.getElementById(id);
+$("headerVersion").textContent="v"+APP_VERSION;$("settingsVersion").textContent=APP_VERSION;
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1900)}
 function go(name){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));const target=$(name+"View");if(target)target.classList.add("active");document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.go===name))}
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
